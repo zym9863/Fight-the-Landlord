@@ -37,48 +37,97 @@ const multiplier = computed(() => Math.pow(2, store.bombCount))
 .info-panel {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 24px;
-  padding: 8px 16px;
-  background: rgba(0, 0, 0, 0.25);
-  border-radius: 8px;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 12px 32px;
+  background: var(--color-panel-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-panel-border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
 }
 
 .landlord-cards {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
 }
 
 .landlord-cards-label {
-  color: #ecf0f1;
-  font-size: 13px;
+  color: var(--color-gold);
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
   white-space: nowrap;
+  text-transform: uppercase;
 }
 
 .landlord-cards-row {
   display: flex;
-  gap: 4px;
+  gap: -10px;
 }
 
 .landlord-card-wrapper {
-  transform: scale(0.7);
-  transform-origin: center;
+  transform: scale(0.6);
+  transform-origin: center left;
+  margin-right: -20px;
+  transition: transform 0.3s ease;
+}
+
+.landlord-card-wrapper:hover {
+  transform: scale(0.7) translateY(-10px);
+  z-index: 10;
 }
 
 .game-info {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 32px;
 }
 
 .info-item {
-  color: #ecf0f1;
-  font-size: 13px;
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 1px;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-item::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--color-gold);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--color-gold);
 }
 
 .info-message {
-  color: #f1c40f;
+  color: var(--color-gold-light);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  animation: pulse 2s infinite;
+}
+
+.info-message::before {
+  display: none;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; text-shadow: 0 0 4px rgba(241, 196, 15, 0.2); }
+  50% { opacity: 1; text-shadow: 0 0 12px rgba(241, 196, 15, 0.6); }
+  100% { opacity: 0.7; text-shadow: 0 0 4px rgba(241, 196, 15, 0.2); }
 }
 </style>

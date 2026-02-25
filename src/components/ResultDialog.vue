@@ -45,60 +45,131 @@ const resultSubtitle = computed(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(5, 24, 16, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: fade-in 0.5s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .result-dialog {
-  background: #fff;
-  border-radius: 16px;
-  padding: 40px 48px;
-  min-width: 300px;
+  background: linear-gradient(135deg, var(--color-bg-light), var(--color-bg-dark));
+  border-radius: var(--radius-panel);
+  padding: 64px 80px;
+  min-width: 400px;
   text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(212, 175, 55, 0.3);
+  position: relative;
+  overflow: hidden;
+  animation: dialog-appear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.result-dialog::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  z-index: 0;
+  opacity: 0.5;
+}
+
+@keyframes dialog-appear {
+  from { opacity: 0; transform: scale(0.8) translateY(40px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.result-dialog > * {
+  position: relative;
+  z-index: 1;
 }
 
 .result-title {
-  font-size: 36px;
-  margin-bottom: 8px;
+  font-family: var(--font-serif);
+  font-size: 64px;
+  font-weight: 900;
+  margin-bottom: 16px;
+  letter-spacing: 8px;
+  text-shadow: 0 4px 16px rgba(0,0,0,0.6);
 }
 
 .result-title.win {
-  color: #f39c12;
+  background: linear-gradient(to bottom, #FFF5C3, var(--color-gold), var(--color-gold-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.4));
 }
 
 .result-title.lose {
-  color: #e74c3c;
+  background: linear-gradient(to bottom, #FFB3B3, var(--color-crimson), #8B0000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 12px rgba(196, 30, 58, 0.4));
 }
 
 .result-subtitle {
-  font-size: 18px;
-  color: #555;
-  margin-bottom: 12px;
+  font-family: var(--font-sans);
+  font-size: 24px;
+  color: var(--color-text-main);
+  margin-bottom: 16px;
+  letter-spacing: 4px;
 }
 
 .result-multiplier {
-  font-size: 16px;
-  color: #7f8c8d;
-  margin-bottom: 24px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--color-gold);
+  margin-bottom: 48px;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .play-again-btn {
-  background: linear-gradient(to bottom, #f39c12, #e67e22);
-  color: #2c3e50;
-  border: none;
-  padding: 14px 40px;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 10px;
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+  color: var(--color-bg-dark);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 18px 56px;
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  border-radius: var(--radius-btn);
   cursor: pointer;
-  transition: transform 0.2s;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.play-again-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+  transform: rotate(45deg) translateX(-100%);
+  transition: transform 0.6s ease-out;
 }
 
 .play-again-btn:hover {
-  transform: scale(1.05);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.play-again-btn:hover::after {
+  transform: rotate(45deg) translateX(100%);
+}
+
+.play-again-btn:active {
+  transform: translateY(2px) scale(0.98);
 }
 </style>

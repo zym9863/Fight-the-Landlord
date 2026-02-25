@@ -97,10 +97,19 @@ const showActionButtons = computed(
 .game-board {
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(ellipse at center, #1a5c2e 0%, #0d3318 70%);
+  background: transparent; /* Background is handled by body */
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
+}
+
+.game-board::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .board-center {
@@ -109,13 +118,17 @@ const showActionButtons = computed(
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 8px;
+  gap: 16px;
+  padding: 16px;
+  position: relative;
+  z-index: 1;
 }
 
 .top-player {
   display: flex;
   justify-content: center;
+  margin-bottom: auto;
+  padding-top: 24px;
 }
 
 .middle-row {
@@ -123,12 +136,14 @@ const showActionButtons = computed(
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 48px;
   width: 100%;
+  flex: 1;
 }
 
 .left-player {
   flex-shrink: 0;
+  padding-left: 48px;
 }
 
 .play-area {
@@ -136,65 +151,89 @@ const showActionButtons = computed(
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 120px;
-  max-width: 600px;
+  min-height: 160px;
+  max-width: 800px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, transparent 70%);
+  border-radius: 50%;
 }
 
 .bottom-player {
   display: flex;
   justify-content: center;
+  margin-top: auto;
+  padding-bottom: 24px;
 }
 
 .action-buttons {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  padding: 8px 0;
+  gap: 24px;
+  padding: 16px 0;
+  position: absolute;
+  bottom: 160px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
 }
 
 .btn {
-  padding: 10px 28px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 12px 36px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-btn);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
 }
 
 .btn:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .btn:active {
-  transform: scale(0.95);
+  transform: translateY(1px);
 }
 
 .btn-primary {
-  background: linear-gradient(to bottom, #f39c12, #e67e22);
-  color: #2c3e50;
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+  color: var(--color-bg-dark);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(to bottom, #f5b041, #f39c12);
+  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
 }
 
 .btn-secondary {
-  background-color: #7f8c8d;
-  color: #ecf0f1;
+  background: linear-gradient(135deg, #4A5568, #2D3748);
+  color: var(--color-text-main);
 }
 
 .btn-secondary:hover {
-  background-color: #95a5a6;
+  background: linear-gradient(135deg, #718096, #4A5568);
 }
 
 .btn-hint {
-  background-color: #3498db;
-  color: #fff;
+  background: linear-gradient(135deg, #2B6CB0, #2C5282);
+  color: var(--color-text-main);
 }
 
 .btn-hint:hover {
-  background-color: #5dade2;
+  background: linear-gradient(135deg, #4299E1, #2B6CB0);
 }
 </style>

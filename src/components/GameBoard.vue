@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useGameStore } from '../stores/game'
+import type { PlayerState } from '../types/card'
 import InfoPanel from './InfoPanel.vue'
 import PlayerHand from './PlayerHand.vue'
 import PlayedCards from './PlayedCards.vue'
@@ -8,31 +9,38 @@ import BidPanel from './BidPanel.vue'
 import ResultDialog from './ResultDialog.vue'
 
 const store = useGameStore()
+const fallbackPlayer: PlayerState = {
+  cards: [],
+  isLandlord: false,
+  name: '',
+  isAI: true,
+}
 
-// Derive the most recent action from turnHistory
-const lastTurn = computed(() => {
-  const history = store.turnHistory
-  if (history.length === 0) return null
-  return history[history.length - 1]
+// Keep the table display focused on the latest actual card play (ignore passes).
+const lastNonPassTurn = computed(() => {
+  for (let i = store.turnHistory.length - 1; i >= 0; i--) {
+    const turn = store.turnHistory[i]
+    if (turn && turn.play !== null) return turn
+  }
+  return null
 })
 
 const lastPlayedCards = computed(() => {
-  const turn = lastTurn.value
+  const turn = lastNonPassTurn.value
   if (!turn || !turn.play) return []
   return turn.play.cards
 })
 
 const lastPlayerName = computed(() => {
-  const turn = lastTurn.value
+  const turn = lastNonPassTurn.value
   if (!turn) return ''
-  return store.players[turn.playerIndex].name
+  return store.players[turn.playerIndex]?.name ?? ''
 })
 
-const lastIsPass = computed(() => {
-  const turn = lastTurn.value
-  if (!turn) return false
-  return turn.play === null
-})
+const lastIsPass = computed(() => false)
+const topPlayer = computed(() => store.players[2] ?? fallbackPlayer)
+const leftPlayer = computed(() => store.players[1] ?? fallbackPlayer)
+const bottomPlayer = computed(() => store.players[0] ?? fallbackPlayer)
 
 const showActionButtons = computed(
   () => store.isPlayerTurn && store.phase === 'playing',
@@ -45,12 +53,12 @@ const showActionButtons = computed(
 
     <div class="board-center">
       <div class="top-player">
-        <PlayerHand :player="store.players[2]" position="top" />
+        <PlayerHand :player="topPlayer" position="top" />
       </div>
 
       <div class="middle-row">
         <div class="left-player">
-          <PlayerHand :player="store.players[1]" position="left" />
+          <PlayerHand :player="leftPlayer" position="left" />
         </div>
 
         <div class="play-area">
@@ -66,7 +74,7 @@ const showActionButtons = computed(
 
       <div class="bottom-player">
         <PlayerHand
-          :player="store.players[0]"
+          :player="bottomPlayer"
           position="bottom"
           :selected-cards="store.selectedCards"
           :interactive="store.isPlayerTurn"
